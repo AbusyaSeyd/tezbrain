@@ -1,0 +1,20 @@
+{
+    "pythonVersion": "3.13",
+    "pythonPlatform": "Darwin",
+    "venvPath": "/Library/Frameworks/Python.framework/Versions/3.13",
+    "venv": "lib/python3.13/site-packages",
+    "executionEnvironments": [
+        {
+            "root": ".",
+            "pythonVersion": "3.13",
+            "pythonPlatform": "Darwin",
+            "extraPaths": [
+                "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages"
+            ]
+        }
+    ],
+    "typeCheckingMode": "off",
+    "reportMissingImports": "none",
+    "reportMissingModuleSource": "none"
+}
+

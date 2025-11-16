@@ -1,0 +1,81 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Model files (trained models are large and should be downloaded separately)
+*.pth
+*.pt
+*.pkl
+*.h5
+*.ckpt
+
+# Logs
+logs/
+*.log
+
+# Generated outputs
+*.png
+*.jpg
+*.jpeg
+!README.md
+# Keep example images if needed, but exclude large datasets
+# Uncomment the following lines if you want to exclude all images:
+# *.png
+# *.jpg
+# *.jpeg
+
+# Data directories (datasets are typically too large for git)
+# Uncomment if you don't want to commit datasets:
+# br35h/
+# sartaj/
+
+# Training outputs
+training_metrics_*.json
+pruning_results_*.json
+confusion_matrix_*.png
+training_curves_*.png
+pruning_results_*.png
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environment variables
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
