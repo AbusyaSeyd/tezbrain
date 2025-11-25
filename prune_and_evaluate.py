@@ -287,9 +287,45 @@ def main():
     # Load or create model
     if args.model_path and os.path.exists(args.model_path):
         print(f"Loading model from {args.model_path}")
-        model = BrainTumorGNN(input_dim=input_dim, hidden_dim=args.hidden_dim,
-                             num_classes=num_classes, num_layers=args.num_layers)
-        model.load_state_dict(torch.load(args.model_path, map_location=device))
+        checkpoint = torch.load(args.model_path, map_location=device)
+        if isinstance(checkpoint, dict):
+            if 'model_state_dict' in checkpoint:
+                state_dict = checkpoint['model_state_dict']
+                print("Detected checkpoint file; using 'model_state_dict'.")
+            elif 'state_dict' in checkpoint:
+                state_dict = checkpoint['state_dict']
+                print("Detected checkpoint file; using 'state_dict'.")
+            elif all(isinstance(k, str) and (k.startswith('convs') or k.startswith('batch_norms') or k.startswith('classifier'))
+                     for k in checkpoint.keys()):
+                state_dict = checkpoint
+            else:
+                raise RuntimeError(
+                    "Unrecognized checkpoint format. Expected raw state_dict or keys "
+                    "like 'model_state_dict'/'state_dict'."
+                )
+            ckpt_args = checkpoint.get('args')
+            if ckpt_args is not None and not isinstance(ckpt_args, dict):
+                ckpt_args = vars(ckpt_args)
+        else:
+            state_dict = checkpoint
+            ckpt_args = None
+
+        ckpt_hidden_dim = ckpt_args.get('hidden_dim') if isinstance(ckpt_args, dict) else None
+        ckpt_num_layers = ckpt_args.get('num_layers') if isinstance(ckpt_args, dict) else None
+
+        hidden_dim = args.hidden_dim
+        if ckpt_hidden_dim and ckpt_hidden_dim != hidden_dim:
+            print(f"Overriding hidden_dim {hidden_dim} with checkpoint value {ckpt_hidden_dim}.")
+            hidden_dim = ckpt_hidden_dim
+
+        num_layers = args.num_layers
+        if ckpt_num_layers and ckpt_num_layers != num_layers:
+            print(f"Overriding num_layers {num_layers} with checkpoint value {ckpt_num_layers}.")
+            num_layers = ckpt_num_layers
+
+        model = BrainTumorGNN(input_dim=input_dim, hidden_dim=hidden_dim,
+                             num_classes=num_classes, num_layers=num_layers)
+        model.load_state_dict(state_dict)
         model = model.to(device)
     else:
         print("Training new model...")

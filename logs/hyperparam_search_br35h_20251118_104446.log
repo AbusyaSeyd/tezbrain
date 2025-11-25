@@ -1,0 +1,130 @@
+2025-11-18 10:44:46 - INFO - Logging hyperparameter search to logs/hyperparam_search_br35h_20251118_104446.log
+2025-11-18 10:44:46 - INFO - ============================================================
+2025-11-18 10:44:46 - INFO - Random Search Hyperparameter Tuning for BR35H
+2025-11-18 10:44:46 - INFO - ============================================================
+2025-11-18 10:44:46 - INFO - Requested trials: 5 | Epochs per trial: 20 | Fast mode: True
+2025-11-18 10:44:46 - INFO - Fast mode enabled: reducing search space and trials (requested 5 -> running 5).
+2025-11-18 10:44:46 - INFO - Starting trial 1/5
+2025-11-18 10:44:46 - INFO - Trial params | LR 0.001 | Batch 32 | Hidden 128 | Layers 3 | Dropout 0.40 | Weight Decay 0.0001 | GAT False | Segments 50 | Grad Clip 1.0
+2025-11-18 10:49:47 - INFO - [BR35H] Epoch 1/20 | Train Loss 0.6797 Acc 0.6408 | Test Loss 0.5506 Acc 0.7417
+2025-11-18 10:54:46 - INFO - [BR35H] Epoch 2/20 | Train Loss 0.5764 Acc 0.6987 | Test Loss 0.5179 Acc 0.7350
+2025-11-18 11:13:16 - INFO - [BR35H] Epoch 3/20 | Train Loss 0.5375 Acc 0.7229 | Test Loss 0.4898 Acc 0.7667
+2025-11-18 11:32:53 - INFO - [BR35H] Epoch 4/20 | Train Loss 0.5023 Acc 0.7417 | Test Loss 0.4665 Acc 0.7717
+2025-11-18 11:38:29 - INFO - [BR35H] Epoch 5/20 | Train Loss 0.5024 Acc 0.7504 | Test Loss 0.5008 Acc 0.7817
+2025-11-18 11:44:12 - INFO - [BR35H] Epoch 6/20 | Train Loss 0.4786 Acc 0.7683 | Test Loss 0.4293 Acc 0.7800
+2025-11-18 11:49:56 - INFO - [BR35H] Epoch 7/20 | Train Loss 0.4871 Acc 0.7567 | Test Loss 0.4370 Acc 0.7833
+2025-11-18 11:55:43 - INFO - [BR35H] Epoch 8/20 | Train Loss 0.4652 Acc 0.7717 | Test Loss 0.4593 Acc 0.8100
+2025-11-18 12:00:58 - INFO - [BR35H] Epoch 9/20 | Train Loss 0.4533 Acc 0.7883 | Test Loss 0.4389 Acc 0.7733
+2025-11-18 12:05:50 - INFO - [BR35H] Epoch 10/20 | Train Loss 0.4791 Acc 0.7792 | Test Loss 0.4276 Acc 0.7983
+2025-11-18 12:10:42 - INFO - [BR35H] Epoch 11/20 | Train Loss 0.4486 Acc 0.7846 | Test Loss 0.4334 Acc 0.8167
+2025-11-18 12:15:41 - INFO - [BR35H] Epoch 12/20 | Train Loss 0.4558 Acc 0.7779 | Test Loss 0.4077 Acc 0.8217
+2025-11-18 12:20:39 - INFO - [BR35H] Epoch 13/20 | Train Loss 0.4456 Acc 0.7921 | Test Loss 0.4137 Acc 0.8067
+2025-11-18 12:25:51 - INFO - [BR35H] Epoch 14/20 | Train Loss 0.4528 Acc 0.7854 | Test Loss 0.4260 Acc 0.8067
+2025-11-18 12:31:26 - INFO - [BR35H] Epoch 15/20 | Train Loss 0.4331 Acc 0.8033 | Test Loss 0.4161 Acc 0.8083
+2025-11-18 12:37:09 - INFO - [BR35H] Epoch 16/20 | Train Loss 0.4495 Acc 0.7954 | Test Loss 0.3865 Acc 0.8317
+2025-11-18 12:42:53 - INFO - [BR35H] Epoch 17/20 | Train Loss 0.4187 Acc 0.8042 | Test Loss 0.4093 Acc 0.8200
+2025-11-18 12:48:44 - INFO - [BR35H] Epoch 18/20 | Train Loss 0.4441 Acc 0.7933 | Test Loss 0.4142 Acc 0.8217
+2025-11-18 12:54:21 - INFO - [BR35H] Epoch 19/20 | Train Loss 0.4445 Acc 0.7992 | Test Loss 0.3957 Acc 0.8117
+2025-11-18 13:00:25 - INFO - [BR35H] Epoch 20/20 | Train Loss 0.4240 Acc 0.8146 | Test Loss 0.3923 Acc 0.8300
+2025-11-18 13:00:25 - INFO - Trial 1 completed | Test Acc 0.8317 (83.17%) | Time 135.65 min
+2025-11-18 13:00:25 - INFO - *** New best score: 0.8317 (83.17%) ***
+2025-11-18 13:00:25 - INFO - Starting trial 2/5
+2025-11-18 13:00:25 - INFO - Trial params | LR 0.002 | Batch 64 | Hidden 64 | Layers 3 | Dropout 0.40 | Weight Decay 5e-05 | GAT False | Segments 50 | Grad Clip 1.0
+2025-11-18 13:06:16 - INFO - [BR35H] Epoch 1/20 | Train Loss 0.6721 Acc 0.6012 | Test Loss 0.5392 Acc 0.7333
+2025-11-18 13:12:06 - INFO - [BR35H] Epoch 2/20 | Train Loss 0.5943 Acc 0.6992 | Test Loss 0.5211 Acc 0.7567
+2025-11-18 13:17:33 - INFO - [BR35H] Epoch 3/20 | Train Loss 0.5546 Acc 0.7221 | Test Loss 0.4927 Acc 0.7700
+2025-11-18 13:22:54 - INFO - [BR35H] Epoch 4/20 | Train Loss 0.5349 Acc 0.7400 | Test Loss 0.4707 Acc 0.7367
+2025-11-18 13:28:21 - INFO - [BR35H] Epoch 5/20 | Train Loss 0.5163 Acc 0.7400 | Test Loss 0.4749 Acc 0.7450
+2025-11-18 13:33:50 - INFO - [BR35H] Epoch 6/20 | Train Loss 0.5004 Acc 0.7575 | Test Loss 0.4386 Acc 0.7967
+2025-11-18 13:39:11 - INFO - [BR35H] Epoch 7/20 | Train Loss 0.4889 Acc 0.7662 | Test Loss 0.4605 Acc 0.7867
+2025-11-18 13:44:24 - INFO - [BR35H] Epoch 8/20 | Train Loss 0.4789 Acc 0.7679 | Test Loss 0.4683 Acc 0.8050
+2025-11-18 13:49:44 - INFO - [BR35H] Epoch 9/20 | Train Loss 0.4815 Acc 0.7608 | Test Loss 0.4319 Acc 0.7983
+2025-11-18 13:55:07 - INFO - [BR35H] Epoch 10/20 | Train Loss 0.4696 Acc 0.7700 | Test Loss 0.4231 Acc 0.7883
+2025-11-18 14:00:33 - INFO - [BR35H] Epoch 11/20 | Train Loss 0.4641 Acc 0.7717 | Test Loss 0.4330 Acc 0.7933
+2025-11-18 14:05:57 - INFO - [BR35H] Epoch 12/20 | Train Loss 0.4794 Acc 0.7754 | Test Loss 0.4433 Acc 0.7883
+2025-11-18 14:11:19 - INFO - [BR35H] Epoch 13/20 | Train Loss 0.4555 Acc 0.7946 | Test Loss 0.4290 Acc 0.8083
+2025-11-18 14:16:44 - INFO - [BR35H] Epoch 14/20 | Train Loss 0.4511 Acc 0.7837 | Test Loss 0.4169 Acc 0.7917
+2025-11-18 14:22:06 - INFO - [BR35H] Epoch 15/20 | Train Loss 0.4461 Acc 0.7854 | Test Loss 0.4109 Acc 0.8100
+2025-11-18 14:27:28 - INFO - [BR35H] Epoch 16/20 | Train Loss 0.4475 Acc 0.7904 | Test Loss 0.4170 Acc 0.7933
+2025-11-18 14:32:54 - INFO - [BR35H] Epoch 17/20 | Train Loss 0.4447 Acc 0.7963 | Test Loss 0.4033 Acc 0.8117
+2025-11-18 14:38:17 - INFO - [BR35H] Epoch 18/20 | Train Loss 0.4392 Acc 0.7921 | Test Loss 0.4431 Acc 0.8050
+2025-11-18 14:43:42 - INFO - [BR35H] Epoch 19/20 | Train Loss 0.4412 Acc 0.7833 | Test Loss 0.4259 Acc 0.8150
+2025-11-18 14:49:07 - INFO - [BR35H] Epoch 20/20 | Train Loss 0.4415 Acc 0.7987 | Test Loss 0.4059 Acc 0.8017
+2025-11-18 14:49:07 - INFO - Trial 2 completed | Test Acc 0.8150 (81.50%) | Time 108.70 min
+2025-11-18 14:49:07 - INFO - Starting trial 3/5
+2025-11-18 14:49:07 - INFO - Trial params | LR 0.002 | Batch 32 | Hidden 128 | Layers 3 | Dropout 0.50 | Weight Decay 0.0001 | GAT True | Segments 100 | Grad Clip 1.0
+2025-11-18 14:58:24 - INFO - [BR35H] Epoch 1/20 | Train Loss 0.8109 Acc 0.5154 | Test Loss 0.6690 Acc 0.5417
+2025-11-18 15:07:41 - INFO - [BR35H] Epoch 2/20 | Train Loss 0.6609 Acc 0.6262 | Test Loss 0.6437 Acc 0.6183
+2025-11-18 15:17:00 - INFO - [BR35H] Epoch 3/20 | Train Loss 0.6061 Acc 0.6846 | Test Loss 0.5465 Acc 0.7233
+2025-11-18 15:26:34 - INFO - [BR35H] Epoch 4/20 | Train Loss 0.5884 Acc 0.7096 | Test Loss 0.5534 Acc 0.7350
+2025-11-18 15:36:10 - INFO - [BR35H] Epoch 5/20 | Train Loss 0.5538 Acc 0.7325 | Test Loss 0.4875 Acc 0.7783
+2025-11-18 15:45:38 - INFO - [BR35H] Epoch 6/20 | Train Loss 0.5163 Acc 0.7425 | Test Loss 0.4763 Acc 0.7667
+2025-11-18 15:55:21 - INFO - [BR35H] Epoch 7/20 | Train Loss 0.4870 Acc 0.7796 | Test Loss 0.4092 Acc 0.8367
+2025-11-18 16:05:07 - INFO - [BR35H] Epoch 8/20 | Train Loss 0.4942 Acc 0.8008 | Test Loss 0.4491 Acc 0.7733
+2025-11-18 16:14:37 - INFO - [BR35H] Epoch 9/20 | Train Loss 0.4650 Acc 0.8092 | Test Loss 0.3871 Acc 0.8133
+2025-11-18 16:24:01 - INFO - [BR35H] Epoch 10/20 | Train Loss 0.4344 Acc 0.8233 | Test Loss 0.4102 Acc 0.7750
+2025-11-18 16:33:37 - INFO - [BR35H] Epoch 11/20 | Train Loss 0.4290 Acc 0.8104 | Test Loss 0.3841 Acc 0.8083
+2025-11-18 16:43:18 - INFO - [BR35H] Epoch 12/20 | Train Loss 0.4460 Acc 0.8221 | Test Loss 0.4118 Acc 0.7983
+2025-11-18 16:52:25 - INFO - [BR35H] Epoch 13/20 | Train Loss 0.4267 Acc 0.8217 | Test Loss 0.4342 Acc 0.7617
+2025-11-18 18:55:19 - INFO - [BR35H] Epoch 14/20 | Train Loss 0.4165 Acc 0.8292 | Test Loss 0.3760 Acc 0.8267
+2025-11-18 21:13:10 - INFO - [BR35H] Epoch 15/20 | Train Loss 0.4349 Acc 0.8387 | Test Loss 0.3513 Acc 0.8400
+2025-11-18 22:01:13 - INFO - [BR35H] Epoch 16/20 | Train Loss 0.4116 Acc 0.8417 | Test Loss 0.3281 Acc 0.8550
+2025-11-18 22:09:36 - INFO - [BR35H] Epoch 17/20 | Train Loss 0.3908 Acc 0.8371 | Test Loss 0.4205 Acc 0.8150
+2025-11-18 22:18:04 - INFO - [BR35H] Epoch 18/20 | Train Loss 0.3790 Acc 0.8392 | Test Loss 0.3560 Acc 0.8600
+2025-11-18 22:26:41 - INFO - [BR35H] Epoch 19/20 | Train Loss 0.4154 Acc 0.8462 | Test Loss 0.3803 Acc 0.8033
+2025-11-18 22:35:20 - INFO - [BR35H] Epoch 20/20 | Train Loss 0.3784 Acc 0.8433 | Test Loss 0.3427 Acc 0.8450
+2025-11-18 22:35:20 - INFO - Trial 3 completed | Test Acc 0.8600 (86.00%) | Time 466.21 min
+2025-11-18 22:35:20 - INFO - *** New best score: 0.8600 (86.00%) ***
+2025-11-18 22:35:20 - INFO - Starting trial 4/5
+2025-11-18 22:35:20 - INFO - Trial params | LR 0.0005 | Batch 64 | Hidden 128 | Layers 2 | Dropout 0.50 | Weight Decay 5e-05 | GAT False | Segments 100 | Grad Clip 1.0
+2025-11-18 22:43:56 - INFO - [BR35H] Epoch 1/20 | Train Loss 0.8209 Acc 0.5508 | Test Loss 0.6107 Acc 0.6900
+2025-11-18 22:52:33 - INFO - [BR35H] Epoch 2/20 | Train Loss 0.6331 Acc 0.6396 | Test Loss 0.5482 Acc 0.7350
+2025-11-18 23:01:19 - INFO - [BR35H] Epoch 3/20 | Train Loss 0.5950 Acc 0.6808 | Test Loss 0.5133 Acc 0.7483
+2025-11-18 23:10:08 - INFO - [BR35H] Epoch 4/20 | Train Loss 0.5753 Acc 0.7188 | Test Loss 0.5120 Acc 0.7383
+2025-11-18 23:18:57 - INFO - [BR35H] Epoch 5/20 | Train Loss 0.5495 Acc 0.7346 | Test Loss 0.4899 Acc 0.7617
+2025-11-18 23:27:47 - INFO - [BR35H] Epoch 6/20 | Train Loss 0.5213 Acc 0.7442 | Test Loss 0.4701 Acc 0.7650
+2025-11-18 23:36:43 - INFO - [BR35H] Epoch 7/20 | Train Loss 0.5139 Acc 0.7425 | Test Loss 0.4612 Acc 0.7767
+2025-11-18 23:45:33 - INFO - [BR35H] Epoch 8/20 | Train Loss 0.5063 Acc 0.7525 | Test Loss 0.4462 Acc 0.8067
+2025-11-18 23:54:27 - INFO - [BR35H] Epoch 9/20 | Train Loss 0.4882 Acc 0.7658 | Test Loss 0.4416 Acc 0.7833
+2025-11-19 00:05:03 - INFO - [BR35H] Epoch 10/20 | Train Loss 0.4853 Acc 0.7712 | Test Loss 0.4617 Acc 0.7617
+2025-11-19 00:17:40 - INFO - [BR35H] Epoch 11/20 | Train Loss 0.4865 Acc 0.7575 | Test Loss 0.4455 Acc 0.7750
+2025-11-19 00:28:31 - INFO - [BR35H] Epoch 12/20 | Train Loss 0.4685 Acc 0.7783 | Test Loss 0.4326 Acc 0.7867
+2025-11-19 00:38:54 - INFO - [BR35H] Epoch 13/20 | Train Loss 0.4680 Acc 0.7733 | Test Loss 0.4362 Acc 0.7867
+2025-11-19 00:47:52 - INFO - [BR35H] Epoch 14/20 | Train Loss 0.4765 Acc 0.7887 | Test Loss 0.4263 Acc 0.7950
+2025-11-19 00:56:44 - INFO - [BR35H] Epoch 15/20 | Train Loss 0.4625 Acc 0.7792 | Test Loss 0.4453 Acc 0.7783
+2025-11-19 01:05:36 - INFO - [BR35H] Epoch 16/20 | Train Loss 0.4572 Acc 0.7783 | Test Loss 0.4387 Acc 0.7983
+2025-11-19 01:14:51 - INFO - [BR35H] Epoch 17/20 | Train Loss 0.4645 Acc 0.7783 | Test Loss 0.4039 Acc 0.8117
+2025-11-19 01:23:51 - INFO - [BR35H] Epoch 18/20 | Train Loss 0.4441 Acc 0.7892 | Test Loss 0.4118 Acc 0.8067
+2025-11-19 01:33:11 - INFO - [BR35H] Epoch 19/20 | Train Loss 0.4629 Acc 0.7842 | Test Loss 0.4021 Acc 0.8167
+2025-11-19 01:42:45 - INFO - [BR35H] Epoch 20/20 | Train Loss 0.4518 Acc 0.7788 | Test Loss 0.4128 Acc 0.8050
+2025-11-19 01:42:45 - INFO - Trial 4 completed | Test Acc 0.8167 (81.67%) | Time 187.41 min
+2025-11-19 01:42:45 - INFO - Starting trial 5/5
+2025-11-19 01:42:45 - INFO - Trial params | LR 0.002 | Batch 64 | Hidden 64 | Layers 2 | Dropout 0.50 | Weight Decay 5e-05 | GAT False | Segments 100 | Grad Clip 1.0
+2025-11-19 01:52:15 - INFO - [BR35H] Epoch 1/20 | Train Loss 0.7334 Acc 0.5642 | Test Loss 0.6160 Acc 0.6200
+2025-11-19 02:01:52 - INFO - [BR35H] Epoch 2/20 | Train Loss 0.6274 Acc 0.6425 | Test Loss 0.5331 Acc 0.7417
+2025-11-19 02:11:26 - INFO - [BR35H] Epoch 3/20 | Train Loss 0.5704 Acc 0.7079 | Test Loss 0.4930 Acc 0.7700
+2025-11-19 02:20:55 - INFO - [BR35H] Epoch 4/20 | Train Loss 0.5491 Acc 0.7271 | Test Loss 0.4806 Acc 0.7683
+2025-11-19 02:30:25 - INFO - [BR35H] Epoch 5/20 | Train Loss 0.5242 Acc 0.7483 | Test Loss 0.4429 Acc 0.8050
+2025-11-19 02:39:55 - INFO - [BR35H] Epoch 6/20 | Train Loss 0.5237 Acc 0.7433 | Test Loss 0.4704 Acc 0.7950
+2025-11-19 02:49:35 - INFO - [BR35H] Epoch 7/20 | Train Loss 0.5146 Acc 0.7638 | Test Loss 0.4571 Acc 0.7850
+2025-11-19 02:59:05 - INFO - [BR35H] Epoch 8/20 | Train Loss 0.5176 Acc 0.7504 | Test Loss 0.4556 Acc 0.7733
+2025-11-19 03:08:35 - INFO - [BR35H] Epoch 9/20 | Train Loss 0.4945 Acc 0.7704 | Test Loss 0.4915 Acc 0.7217
+2025-11-19 03:18:05 - INFO - [BR35H] Epoch 10/20 | Train Loss 0.5158 Acc 0.7596 | Test Loss 0.4590 Acc 0.8000
+2025-11-19 03:27:28 - INFO - [BR35H] Epoch 11/20 | Train Loss 0.4883 Acc 0.7679 | Test Loss 0.4475 Acc 0.7817
+2025-11-19 03:36:32 - INFO - [BR35H] Epoch 12/20 | Train Loss 0.4876 Acc 0.7692 | Test Loss 0.4126 Acc 0.8317
+2025-11-19 03:45:28 - INFO - [BR35H] Epoch 13/20 | Train Loss 0.4858 Acc 0.7596 | Test Loss 0.4067 Acc 0.8250
+2025-11-19 03:54:26 - INFO - [BR35H] Epoch 14/20 | Train Loss 0.4784 Acc 0.7608 | Test Loss 0.4749 Acc 0.7650
+2025-11-19 04:03:18 - INFO - [BR35H] Epoch 15/20 | Train Loss 0.4885 Acc 0.7650 | Test Loss 0.4288 Acc 0.8283
+2025-11-19 04:12:14 - INFO - [BR35H] Epoch 16/20 | Train Loss 0.4834 Acc 0.7721 | Test Loss 0.4375 Acc 0.7733
+2025-11-19 04:21:31 - INFO - [BR35H] Epoch 17/20 | Train Loss 0.4710 Acc 0.7612 | Test Loss 0.4357 Acc 0.8017
+2025-11-19 04:30:41 - INFO - [BR35H] Epoch 18/20 | Train Loss 0.4590 Acc 0.7858 | Test Loss 0.3913 Acc 0.8217
+2025-11-19 04:39:49 - INFO - [BR35H] Epoch 19/20 | Train Loss 0.4676 Acc 0.7846 | Test Loss 0.4531 Acc 0.7700
+2025-11-19 04:49:08 - INFO - [BR35H] Epoch 20/20 | Train Loss 0.4629 Acc 0.7846 | Test Loss 0.4132 Acc 0.7917
+2025-11-19 04:49:08 - INFO - Trial 5 completed | Test Acc 0.8317 (83.17%) | Time 186.38 min
+2025-11-19 04:49:08 - INFO - Top 3 trials by accuracy:
+2025-11-19 04:49:08 - INFO -  #1 | Acc 0.8600 (86.00%) | LR 0.002 | Batch 32 | Hidden 128 | Layers 3 | Dropout 0.50 | WD 0.0001 | GAT True | Segments 100 | Grad Clip 1.0 | Time 466.21 min
+2025-11-19 04:49:08 - INFO -  #2 | Acc 0.8317 (83.17%) | LR 0.001 | Batch 32 | Hidden 128 | Layers 3 | Dropout 0.40 | WD 0.0001 | GAT False | Segments 50 | Grad Clip 1.0 | Time 135.65 min
+2025-11-19 04:49:08 - INFO -  #3 | Acc 0.8317 (83.17%) | LR 0.002 | Batch 64 | Hidden 64 | Layers 2 | Dropout 0.50 | WD 5e-05 | GAT False | Segments 100 | Grad Clip 1.0 | Time 186.38 min
+2025-11-19 04:49:08 - INFO - Best score 0.8600 (86.00%)
+2025-11-19 04:49:08 - INFO - Best params: {'lr': 0.002, 'batch_size': 32, 'hidden_dim': 128, 'num_layers': 3, 'dropout': 0.5, 'weight_decay': 0.0001, 'use_gat': True, 'n_segments': 100, 'grad_clip': 1.0}
+2025-11-19 04:49:08 - INFO - Random search finished: 5/5 trials completed.

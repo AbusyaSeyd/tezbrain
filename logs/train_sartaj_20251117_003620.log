@@ -1,0 +1,24 @@
+2025-11-17 00:36:20 - train_sartaj - INFO - ==================================================
+2025-11-17 00:36:20 - train_sartaj - INFO - Training on sartaj Dataset (Multi-class Classification)
+2025-11-17 00:36:20 - train_sartaj - INFO - ==================================================
+2025-11-17 00:36:20 - train_sartaj - INFO - Hyperparameters:
+2025-11-17 00:36:20 - train_sartaj - INFO -   Epochs: 100
+2025-11-17 00:36:20 - train_sartaj - INFO -   Batch Size: 32
+2025-11-17 00:36:20 - train_sartaj - INFO -   Learning Rate: 0.005
+2025-11-17 00:36:20 - train_sartaj - INFO -   Hidden Dim: 64
+2025-11-17 00:36:20 - train_sartaj - INFO -   Num Layers: 3
+2025-11-17 00:36:20 - train_sartaj - INFO -   Dropout: 0.5
+2025-11-17 00:36:20 - train_sartaj - INFO -   Weight Decay: 0.0005
+2025-11-17 00:36:20 - train_sartaj - INFO -   N Segments: 100
+2025-11-17 00:36:20 - train_sartaj - INFO -   Use GAT: False
+2025-11-17 00:36:20 - train_sartaj - INFO -   Gradient Clipping: 1.0
+2025-11-17 00:36:20 - train_sartaj - INFO -   Early Stopping Patience: 20
+2025-11-17 00:36:20 - train_sartaj - INFO -   Mixed Precision: False
+2025-11-17 00:36:20 - train_sartaj - INFO - Using device: cpu
+2025-11-17 00:36:20 - train_sartaj - INFO - Loading datasets...
+2025-11-17 00:36:20 - train_sartaj - INFO - Train samples: 800
+2025-11-17 00:36:20 - train_sartaj - INFO - Test samples: 200
+2025-11-17 00:36:22 - train_sartaj - INFO - Input dimension: 7
+2025-11-17 00:36:22 - train_sartaj - INFO - Total parameters: 23,780
+2025-11-17 00:36:22 - train_sartaj - INFO - Trainable parameters: 23,780
+2025-11-17 00:36:22 - train_sartaj - INFO - Starting training...

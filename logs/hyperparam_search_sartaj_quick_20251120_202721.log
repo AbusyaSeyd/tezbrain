@@ -1,0 +1,12 @@
+2025-11-20 20:27:21,186 - INFO - ============================================================
+2025-11-20 20:27:21,186 - INFO - Random Search | dataset=SARTAJ | mode=quick | trials=6 | epochs=30
+2025-11-20 20:27:21,186 - INFO - Search space sizes: {'lr': 3, 'batch_size': 2, 'hidden_dim': 2, 'num_layers': 2, 'dropout': 2, 'weight_decay': 3, 'use_gat': 2, 'n_segments': 2, 'grad_clip': 2}
+2025-11-20 20:27:21,186 - INFO - ------------------------------------------------------------
+2025-11-20 20:27:21,186 - INFO - Trial 1/6
+2025-11-20 20:27:21,186 - INFO - Params | lr=0.001000 | batch=16 | hidden=64 | layers=2 | dropout=0.30 | wd=0.000100 | gat=False | segments=75 | grad_clip=0.50
+2025-11-20 20:27:21,186 - INFO - Loading SARTAJ dataset | segments=75 | batch_size=16
+2025-11-20 20:27:21,596 - INFO - Initializing model | hidden_dim=64 | layers=2 | dropout=0.30 | use_gat=False
+2025-11-20 20:31:00,874 - INFO - Epoch 1/30 | train_loss=1.4442 | train_acc=0.3125 | test_loss=1.3870 | test_acc=0.3200 | best_acc=0.3200 | lr=0.001000
+2025-11-20 20:34:04,174 - INFO - Epoch 2/30 | train_loss=1.2702 | train_acc=0.3875 | test_loss=1.3547 | test_acc=0.3700 | best_acc=0.3700 | lr=0.001000
+2025-11-20 20:37:11,232 - INFO - Epoch 3/30 | train_loss=1.1606 | train_acc=0.4437 | test_loss=1.4281 | test_acc=0.3700 | best_acc=0.3700 | lr=0.001000
+2025-11-20 20:55:39,918 - INFO - Epoch 4/30 | train_loss=1.1158 | train_acc=0.5050 | test_loss=1.4454 | test_acc=0.3500 | best_acc=0.3700 | lr=0.001000

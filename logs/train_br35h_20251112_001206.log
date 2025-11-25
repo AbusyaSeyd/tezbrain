@@ -1,0 +1,166 @@
+2025-11-12 00:12:06 - train_br35h - INFO - ==================================================
+2025-11-12 00:12:06 - train_br35h - INFO - Training on br35h Dataset (Binary Classification)
+2025-11-12 00:12:06 - train_br35h - INFO - ==================================================
+2025-11-12 00:12:06 - train_br35h - INFO - Hyperparameters:
+2025-11-12 00:12:06 - train_br35h - INFO -   Epochs: 50
+2025-11-12 00:12:06 - train_br35h - INFO -   Batch Size: 32
+2025-11-12 00:12:06 - train_br35h - INFO -   Learning Rate: 0.001
+2025-11-12 00:12:06 - train_br35h - INFO -   Hidden Dim: 64
+2025-11-12 00:12:06 - train_br35h - INFO -   Num Layers: 3
+2025-11-12 00:12:06 - train_br35h - INFO -   Dropout: 0.5
+2025-11-12 00:12:06 - train_br35h - INFO -   Weight Decay: 0.0005
+2025-11-12 00:12:06 - train_br35h - INFO -   N Segments: 100
+2025-11-12 00:12:06 - train_br35h - INFO -   Use GAT: False
+2025-11-12 00:12:06 - train_br35h - INFO -   Gradient Clipping: 1.0
+2025-11-12 00:12:06 - train_br35h - INFO -   Early Stopping Patience: 20
+2025-11-12 00:12:06 - train_br35h - INFO -   Mixed Precision: False
+2025-11-12 00:12:06 - train_br35h - INFO - Using device: cpu
+2025-11-12 00:12:06 - train_br35h - INFO - Loading datasets...
+2025-11-12 00:12:06 - train_br35h - INFO - Train samples: 2400
+2025-11-12 00:12:06 - train_br35h - INFO - Test samples: 600
+2025-11-12 00:12:06 - train_br35h - INFO - Input dimension: 7
+2025-11-12 00:12:06 - train_br35h - INFO - Total parameters: 23,714
+2025-11-12 00:12:06 - train_br35h - INFO - Trainable parameters: 23,714
+2025-11-12 00:12:06 - train_br35h - INFO - Starting training...
+2025-11-12 00:20:08 - train_br35h - DEBUG - Saved best model at epoch 1 with accuracy 0.7133
+2025-11-12 00:20:08 - train_br35h - INFO - Epoch 1/50 (482.00s)
+2025-11-12 00:20:08 - train_br35h - INFO -   Train Loss: 0.8101, Train Acc: 0.5308
+2025-11-12 00:20:08 - train_br35h - INFO -   Test Loss: 0.6040, Test Acc: 0.7133
+2025-11-12 00:20:08 - train_br35h - INFO -   Best Acc: 0.7133 (epoch 1)
+2025-11-12 00:20:08 - train_br35h - INFO -   Learning Rate: 0.001000
+2025-11-12 00:20:08 - train_br35h - DEBUG - Epoch 1: train_loss=0.8101, train_acc=0.5308, test_loss=0.6040, test_acc=0.7133, lr=0.001000
+2025-11-12 00:28:34 - train_br35h - DEBUG - Saved best model at epoch 2 with accuracy 0.7350
+2025-11-12 00:28:34 - train_br35h - DEBUG - Epoch 2: train_loss=0.6389, train_acc=0.6358, test_loss=0.5341, test_acc=0.7350, lr=0.001000
+2025-11-12 00:37:11 - train_br35h - DEBUG - Saved best model at epoch 3 with accuracy 0.7483
+2025-11-12 00:37:11 - train_br35h - DEBUG - Epoch 3: train_loss=0.5996, train_acc=0.6837, test_loss=0.4995, test_acc=0.7483, lr=0.001000
+2025-11-12 01:41:11 - train_br35h - DEBUG - Epoch 4: train_loss=0.5625, train_acc=0.7221, test_loss=0.4967, test_acc=0.7450, lr=0.001000
+2025-11-12 02:38:55 - train_br35h - DEBUG - Saved best model at epoch 5 with accuracy 0.8050
+2025-11-12 02:38:55 - train_br35h - INFO - Epoch 5/50 (3463.78s)
+2025-11-12 02:38:55 - train_br35h - INFO -   Train Loss: 0.5329, Train Acc: 0.7571
+2025-11-12 02:38:55 - train_br35h - INFO -   Test Loss: 0.4481, Test Acc: 0.8050
+2025-11-12 02:38:55 - train_br35h - INFO -   Best Acc: 0.8050 (epoch 5)
+2025-11-12 02:38:55 - train_br35h - INFO -   Learning Rate: 0.001000
+2025-11-12 02:38:55 - train_br35h - DEBUG - Epoch 5: train_loss=0.5329, train_acc=0.7571, test_loss=0.4481, test_acc=0.8050, lr=0.001000
+2025-11-12 03:18:17 - train_br35h - DEBUG - Epoch 6: train_loss=0.5373, train_acc=0.7467, test_loss=0.4597, test_acc=0.7800, lr=0.001000
+2025-11-12 03:28:25 - train_br35h - DEBUG - Epoch 7: train_loss=0.5220, train_acc=0.7592, test_loss=0.4477, test_acc=0.7767, lr=0.001000
+2025-11-12 03:38:21 - train_br35h - DEBUG - Epoch 8: train_loss=0.5128, train_acc=0.7621, test_loss=0.4589, test_acc=0.7733, lr=0.001000
+2025-11-12 03:48:21 - train_br35h - DEBUG - Epoch 9: train_loss=0.4945, train_acc=0.7683, test_loss=0.4230, test_acc=0.7983, lr=0.001000
+2025-11-12 03:58:26 - train_br35h - INFO - Epoch 10/50 (605.09s)
+2025-11-12 03:58:26 - train_br35h - INFO -   Train Loss: 0.4810, Train Acc: 0.7800
+2025-11-12 03:58:26 - train_br35h - INFO -   Test Loss: 0.4218, Test Acc: 0.7933
+2025-11-12 03:58:26 - train_br35h - INFO -   Best Acc: 0.8050 (epoch 5)
+2025-11-12 03:58:26 - train_br35h - INFO -   Learning Rate: 0.001000
+2025-11-12 03:58:26 - train_br35h - DEBUG - Epoch 10: train_loss=0.4810, train_acc=0.7800, test_loss=0.4218, test_acc=0.7933, lr=0.001000
+2025-11-12 04:08:31 - train_br35h - DEBUG - Epoch 11: train_loss=0.4811, train_acc=0.7850, test_loss=0.4113, test_acc=0.8017, lr=0.001000
+2025-11-12 04:36:45 - train_br35h - DEBUG - Epoch 12: train_loss=0.4754, train_acc=0.7837, test_loss=0.4114, test_acc=0.8050, lr=0.001000
+2025-11-12 05:59:07 - train_br35h - DEBUG - Saved best model at epoch 13 with accuracy 0.8067
+2025-11-12 05:59:07 - train_br35h - DEBUG - Epoch 13: train_loss=0.4722, train_acc=0.7933, test_loss=0.4152, test_acc=0.8067, lr=0.001000
+2025-11-12 06:08:45 - train_br35h - DEBUG - Saved best model at epoch 14 with accuracy 0.8217
+2025-11-12 06:08:45 - train_br35h - DEBUG - Epoch 14: train_loss=0.4722, train_acc=0.7913, test_loss=0.3932, test_acc=0.8217, lr=0.001000
+2025-11-12 06:18:34 - train_br35h - INFO - Epoch 15/50 (588.27s)
+2025-11-12 06:18:34 - train_br35h - INFO -   Train Loss: 0.4440, Train Acc: 0.7983
+2025-11-12 06:18:34 - train_br35h - INFO -   Test Loss: 0.4047, Test Acc: 0.8017
+2025-11-12 06:18:34 - train_br35h - INFO -   Best Acc: 0.8217 (epoch 14)
+2025-11-12 06:18:34 - train_br35h - INFO -   Learning Rate: 0.001000
+2025-11-12 06:18:34 - train_br35h - DEBUG - Epoch 15: train_loss=0.4440, train_acc=0.7983, test_loss=0.4047, test_acc=0.8017, lr=0.001000
+2025-11-12 06:28:32 - train_br35h - DEBUG - Epoch 16: train_loss=0.4625, train_acc=0.7996, test_loss=0.3854, test_acc=0.8217, lr=0.001000
+2025-11-12 06:38:34 - train_br35h - DEBUG - Saved best model at epoch 17 with accuracy 0.8350
+2025-11-12 06:38:34 - train_br35h - DEBUG - Epoch 17: train_loss=0.4585, train_acc=0.8017, test_loss=0.3826, test_acc=0.8350, lr=0.001000
+2025-11-12 06:48:43 - train_br35h - DEBUG - Epoch 18: train_loss=0.4561, train_acc=0.8100, test_loss=0.3748, test_acc=0.8150, lr=0.001000
+2025-11-12 07:18:12 - train_br35h - DEBUG - Epoch 19: train_loss=0.4420, train_acc=0.8042, test_loss=0.3836, test_acc=0.8200, lr=0.001000
+2025-11-12 07:26:28 - train_br35h - INFO - Epoch 20/50 (496.77s)
+2025-11-12 07:26:28 - train_br35h - INFO -   Train Loss: 0.4551, Train Acc: 0.8100
+2025-11-12 07:26:28 - train_br35h - INFO -   Test Loss: 0.3540, Test Acc: 0.8283
+2025-11-12 07:26:28 - train_br35h - INFO -   Best Acc: 0.8350 (epoch 17)
+2025-11-12 07:26:28 - train_br35h - INFO -   Learning Rate: 0.001000
+2025-11-12 07:26:28 - train_br35h - DEBUG - Epoch 20: train_loss=0.4551, train_acc=0.8100, test_loss=0.3540, test_acc=0.8283, lr=0.001000
+2025-11-12 07:34:58 - train_br35h - DEBUG - Epoch 21: train_loss=0.4358, train_acc=0.8058, test_loss=0.3695, test_acc=0.8233, lr=0.001000
+2025-11-12 07:43:31 - train_br35h - DEBUG - Epoch 22: train_loss=0.4270, train_acc=0.8183, test_loss=0.3637, test_acc=0.8267, lr=0.001000
+2025-11-12 07:51:57 - train_br35h - DEBUG - Saved best model at epoch 23 with accuracy 0.8417
+2025-11-12 07:51:57 - train_br35h - DEBUG - Epoch 23: train_loss=0.4264, train_acc=0.8167, test_loss=0.3356, test_acc=0.8417, lr=0.001000
+2025-11-12 09:15:23 - train_br35h - DEBUG - Epoch 24: train_loss=0.4191, train_acc=0.8125, test_loss=0.3472, test_acc=0.8417, lr=0.001000
+2025-11-12 09:25:13 - train_br35h - DEBUG - Saved best model at epoch 25 with accuracy 0.8517
+2025-11-12 09:25:13 - train_br35h - INFO - Epoch 25/50 (590.39s)
+2025-11-12 09:25:13 - train_br35h - INFO -   Train Loss: 0.4246, Train Acc: 0.8175
+2025-11-12 09:25:13 - train_br35h - INFO -   Test Loss: 0.3397, Test Acc: 0.8517
+2025-11-12 09:25:13 - train_br35h - INFO -   Best Acc: 0.8517 (epoch 25)
+2025-11-12 09:25:13 - train_br35h - INFO -   Learning Rate: 0.001000
+2025-11-12 09:25:13 - train_br35h - DEBUG - Epoch 25: train_loss=0.4246, train_acc=0.8175, test_loss=0.3397, test_acc=0.8517, lr=0.001000
+2025-11-12 09:33:55 - train_br35h - DEBUG - Epoch 26: train_loss=0.4230, train_acc=0.8237, test_loss=0.3435, test_acc=0.8467, lr=0.001000
+2025-11-12 09:42:17 - train_br35h - DEBUG - Epoch 27: train_loss=0.4090, train_acc=0.8217, test_loss=0.3526, test_acc=0.8417, lr=0.001000
+2025-11-12 09:50:40 - train_br35h - DEBUG - Epoch 28: train_loss=0.3993, train_acc=0.8167, test_loss=0.3355, test_acc=0.8450, lr=0.001000
+2025-11-12 09:59:06 - train_br35h - DEBUG - Epoch 29: train_loss=0.4186, train_acc=0.8225, test_loss=0.3304, test_acc=0.8517, lr=0.001000
+2025-11-12 10:07:20 - train_br35h - DEBUG - Saved best model at epoch 30 with accuracy 0.8667
+2025-11-12 10:07:20 - train_br35h - INFO - Epoch 30/50 (494.22s)
+2025-11-12 10:07:20 - train_br35h - INFO -   Train Loss: 0.4025, Train Acc: 0.8287
+2025-11-12 10:07:20 - train_br35h - INFO -   Test Loss: 0.3424, Test Acc: 0.8667
+2025-11-12 10:07:20 - train_br35h - INFO -   Best Acc: 0.8667 (epoch 30)
+2025-11-12 10:07:20 - train_br35h - INFO -   Learning Rate: 0.001000
+2025-11-12 10:07:20 - train_br35h - DEBUG - Epoch 30: train_loss=0.4025, train_acc=0.8287, test_loss=0.3424, test_acc=0.8667, lr=0.001000
+2025-11-12 10:14:59 - train_br35h - DEBUG - Saved best model at epoch 31 with accuracy 0.8783
+2025-11-12 10:14:59 - train_br35h - DEBUG - Epoch 31: train_loss=0.4269, train_acc=0.8233, test_loss=0.3196, test_acc=0.8783, lr=0.001000
+2025-11-12 10:33:51 - train_br35h - DEBUG - Epoch 32: train_loss=0.4139, train_acc=0.8263, test_loss=0.3252, test_acc=0.8617, lr=0.001000
+2025-11-12 10:41:34 - train_br35h - DEBUG - Epoch 33: train_loss=0.3978, train_acc=0.8308, test_loss=0.3238, test_acc=0.8533, lr=0.001000
+2025-11-12 10:49:15 - train_br35h - DEBUG - Epoch 34: train_loss=0.4076, train_acc=0.8263, test_loss=0.3113, test_acc=0.8667, lr=0.001000
+2025-11-12 11:12:47 - train_br35h - INFO - Epoch 35/50 (1412.83s)
+2025-11-12 11:12:47 - train_br35h - INFO -   Train Loss: 0.3905, Train Acc: 0.8387
+2025-11-12 11:12:47 - train_br35h - INFO -   Test Loss: 0.3391, Test Acc: 0.8233
+2025-11-12 11:12:47 - train_br35h - INFO -   Best Acc: 0.8783 (epoch 31)
+2025-11-12 11:12:47 - train_br35h - INFO -   Learning Rate: 0.001000
+2025-11-12 11:12:47 - train_br35h - DEBUG - Epoch 35: train_loss=0.3905, train_acc=0.8387, test_loss=0.3391, test_acc=0.8233, lr=0.001000
+2025-11-12 11:56:41 - train_br35h - DEBUG - Epoch 36: train_loss=0.3795, train_acc=0.8308, test_loss=0.3222, test_acc=0.8500, lr=0.001000
+2025-11-12 12:04:24 - train_br35h - DEBUG - Epoch 37: train_loss=0.4095, train_acc=0.8221, test_loss=0.3142, test_acc=0.8533, lr=0.001000
+2025-11-12 12:12:10 - train_br35h - DEBUG - Epoch 38: train_loss=0.3988, train_acc=0.8271, test_loss=0.3191, test_acc=0.8567, lr=0.001000
+2025-11-12 12:19:47 - train_br35h - DEBUG - Epoch 39: train_loss=0.3905, train_acc=0.8367, test_loss=0.3198, test_acc=0.8500, lr=0.001000
+2025-11-12 12:27:28 - train_br35h - INFO - Epoch 40/50 (460.65s)
+2025-11-12 12:27:28 - train_br35h - INFO -   Train Loss: 0.4068, Train Acc: 0.8313
+2025-11-12 12:27:28 - train_br35h - INFO -   Test Loss: 0.3066, Test Acc: 0.8683
+2025-11-12 12:27:28 - train_br35h - INFO -   Best Acc: 0.8783 (epoch 31)
+2025-11-12 12:27:28 - train_br35h - INFO -   Learning Rate: 0.001000
+2025-11-12 12:27:28 - train_br35h - DEBUG - Epoch 40: train_loss=0.4068, train_acc=0.8313, test_loss=0.3066, test_acc=0.8683, lr=0.001000
+2025-11-12 12:35:12 - train_br35h - DEBUG - Epoch 41: train_loss=0.3928, train_acc=0.8383, test_loss=0.3110, test_acc=0.8617, lr=0.001000
+2025-11-12 12:42:57 - train_br35h - DEBUG - Epoch 42: train_loss=0.4012, train_acc=0.8400, test_loss=0.3018, test_acc=0.8700, lr=0.001000
+2025-11-12 12:50:35 - train_br35h - DEBUG - Epoch 43: train_loss=0.3969, train_acc=0.8367, test_loss=0.3404, test_acc=0.8450, lr=0.001000
+2025-11-12 12:58:09 - train_br35h - DEBUG - Epoch 44: train_loss=0.3852, train_acc=0.8421, test_loss=0.2931, test_acc=0.8700, lr=0.001000
+2025-11-12 13:05:45 - train_br35h - INFO - Epoch 45/50 (455.85s)
+2025-11-12 13:05:45 - train_br35h - INFO -   Train Loss: 0.3925, Train Acc: 0.8392
+2025-11-12 13:05:45 - train_br35h - INFO -   Test Loss: 0.3044, Test Acc: 0.8617
+2025-11-12 13:05:45 - train_br35h - INFO -   Best Acc: 0.8783 (epoch 31)
+2025-11-12 13:05:45 - train_br35h - INFO -   Learning Rate: 0.001000
+2025-11-12 13:05:45 - train_br35h - DEBUG - Epoch 45: train_loss=0.3925, train_acc=0.8392, test_loss=0.3044, test_acc=0.8617, lr=0.001000
+2025-11-12 13:13:22 - train_br35h - DEBUG - Epoch 46: train_loss=0.3886, train_acc=0.8358, test_loss=0.2978, test_acc=0.8667, lr=0.001000
+2025-11-12 13:20:59 - train_br35h - DEBUG - Epoch 47: train_loss=0.3871, train_acc=0.8313, test_loss=0.3086, test_acc=0.8700, lr=0.001000
+2025-11-12 13:28:35 - train_br35h - DEBUG - Saved best model at epoch 48 with accuracy 0.8883
+2025-11-12 13:28:35 - train_br35h - DEBUG - Epoch 48: train_loss=0.3750, train_acc=0.8375, test_loss=0.2980, test_acc=0.8883, lr=0.001000
+2025-11-12 13:36:11 - train_br35h - DEBUG - Epoch 49: train_loss=0.3655, train_acc=0.8483, test_loss=0.2917, test_acc=0.8617, lr=0.001000
+2025-11-12 13:43:48 - train_br35h - INFO - Epoch 50/50 (456.49s)
+2025-11-12 13:43:48 - train_br35h - INFO -   Train Loss: 0.3824, Train Acc: 0.8396
+2025-11-12 13:43:48 - train_br35h - INFO -   Test Loss: 0.2867, Test Acc: 0.8817
+2025-11-12 13:43:48 - train_br35h - INFO -   Best Acc: 0.8883 (epoch 48)
+2025-11-12 13:43:48 - train_br35h - INFO -   Learning Rate: 0.001000
+2025-11-12 13:43:48 - train_br35h - DEBUG - Epoch 50: train_loss=0.3824, train_acc=0.8396, test_loss=0.2867, test_acc=0.8817, lr=0.001000
+2025-11-12 13:43:48 - train_br35h - INFO - Training completed in 811.70 minutes
+2025-11-12 13:43:48 - train_br35h - INFO - Loaded best model from epoch 48
+2025-11-12 13:45:21 - train_br35h - INFO - ==================================================
+2025-11-12 13:45:21 - train_br35h - INFO - Final Results
+2025-11-12 13:45:21 - train_br35h - INFO - ==================================================
+2025-11-12 13:45:21 - train_br35h - INFO - Best Epoch: 48
+2025-11-12 13:45:21 - train_br35h - INFO - Test Accuracy: 0.8883
+2025-11-12 13:45:21 - train_br35h - INFO - Test Loss: 0.2980
+2025-11-12 13:45:21 - train_br35h - INFO - 
+Classification Report:
+2025-11-12 13:45:21 - train_br35h - INFO -               precision    recall  f1-score   support
+
+    No Tumor       0.84      0.95      0.90       300
+       Tumor       0.95      0.82      0.88       300
+
+    accuracy                           0.89       600
+   macro avg       0.90      0.89      0.89       600
+weighted avg       0.90      0.89      0.89       600
+
+2025-11-12 13:45:21 - train_br35h - INFO - Metrics saved to training_metrics_br35h.json
+2025-11-12 13:45:22 - train_br35h - INFO - Confusion matrix saved to confusion_matrix_br35h.png
+2025-11-12 13:45:22 - train_br35h - INFO - Training curves saved to training_curves_br35h.png
+2025-11-12 13:45:22 - train_br35h - INFO - ==================================================
+2025-11-12 13:45:22 - train_br35h - INFO - Training completed successfully!
+2025-11-12 13:45:22 - train_br35h - INFO - ==================================================

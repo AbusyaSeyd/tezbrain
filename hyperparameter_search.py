@@ -2,24 +2,127 @@ import torch
 import torch.nn as nn
 from torch_geometric.loader import DataLoader
 import random
-import numpy as np
 import matplotlib.pyplot as plt
 import argparse
 import os
 import time
+import logging
 from datetime import datetime
 
 from data_loader import Br35HDataset, SartajDataset
 from gnn_model import BrainTumorGNN, GraphClassifier
 
+# ---------------------------------------------------------------------------
+# Helper utilities
+# ---------------------------------------------------------------------------
 
-def train_with_hyperparams(args, dataset_name='br35h', return_full_history=False):
+FULL_SEARCH_SPACE = {
+    'lr': [0.0001, 0.0005, 0.001, 0.002, 0.005, 0.01],
+    'batch_size': [16, 32, 64],
+    'hidden_dim': [32, 64, 128, 256],
+    'num_layers': [2, 3, 4, 5],
+    'dropout': [0.3, 0.4, 0.5, 0.6],
+    'weight_decay': [1e-5, 5e-5, 1e-4, 5e-4, 1e-3],
+    'use_gat': [True, False],
+    'n_segments': [50, 100, 150],
+    'grad_clip': [0.5, 1.0, 1.5]
+}
+
+QUICK_SEARCH_SPACE = {
+    'lr': [0.0003, 0.0005, 0.001],
+    'batch_size': [16, 32],
+    'hidden_dim': [64, 128],
+    'num_layers': [2, 3],
+    'dropout': [0.3, 0.4],
+    'weight_decay': [1e-5, 5e-5, 1e-4],
+    'use_gat': [False, True],
+    'n_segments': [50, 75],
+    'grad_clip': [0.5, 1.0]
+}
+
+FULL_DEFAULTS = {
+    'n_trials': 20,
+    'epochs': 100
+}
+
+QUICK_DEFAULTS = {
+    'n_trials': 6,
+    'epochs': 30
+}
+
+
+def get_search_space(mode: str):
+    if mode == 'quick':
+        return QUICK_SEARCH_SPACE
+    return FULL_SEARCH_SPACE
+
+
+def setup_search_logger(dataset_name: str, mode: str, log_dir: str):
+    os.makedirs(log_dir, exist_ok=True)
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    log_path = os.path.join(
+        log_dir,
+        f"hyperparam_search_{dataset_name}_{mode}_{timestamp}.log"
+    )
+    logger_name = f"hyperparam_search.{dataset_name}.{timestamp}"
+    logger = logging.getLogger(logger_name)
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+    logger.handlers = []
+
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+
+    file_handler = logging.FileHandler(log_path)
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(formatter)
+    logger.addHandler(stream_handler)
+
+    return logger, log_path
+
+
+def log_top_results(logger, results, best_params, best_score, top_k=3):
+    if not results:
+        logger.warning("No successful trials were logged; skipping summary.")
+        return
+
+    sorted_results = sorted(results, key=lambda x: x['test_acc'], reverse=True)
+    logger.info("Top %d trials:", min(top_k, len(sorted_results)))
+    for idx, result in enumerate(sorted_results[:top_k], start=1):
+        logger.info(
+            "Rank %d | Acc: %.4f | LR: %.5f | Batch: %d | Hidden: %d | Layers: %d | Dropout: %.2f | GAT: %s | Segments: %d | Time: %.2f min",
+            idx,
+            result['test_acc'],
+            result['lr'],
+            result['batch_size'],
+            result['hidden_dim'],
+            result['num_layers'],
+            result['dropout'],
+            'Y' if result['use_gat'] else 'N',
+            result['n_segments'],
+            result['train_time_min']
+        )
+
+    if best_params is not None:
+        logger.info("Best score %.4f (%.2f%%) achieved with params: %s",
+                    best_score, best_score * 100, best_params)
+
+
+def train_with_hyperparams(args, dataset_name='br35h', return_full_history=False, logger=None):
     """
     Train model with given hyperparameters and return test accuracy.
     Simplified version for hyperparameter search.
     """
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     
+    if logger:
+        logger.info(
+            "Loading %s dataset | segments=%d | batch_size=%d",
+            dataset_name.upper(), args.n_segments, args.batch_size
+        )
+
     # Load datasets
     if dataset_name == 'br35h':
         train_dataset = Br35HDataset(
@@ -66,6 +169,12 @@ def train_with_hyperparams(args, dataset_name='br35h', return_full_history=False
     sample = train_dataset[0]
     input_dim = sample.x.shape[1]
     
+    if logger:
+        logger.info(
+            "Initializing model | hidden_dim=%d | layers=%d | dropout=%.2f | use_gat=%s",
+            args.hidden_dim, args.num_layers, args.dropout, args.use_gat
+        )
+
     # Model
     model = BrainTumorGNN(
         input_dim=input_dim,
@@ -105,6 +214,19 @@ def train_with_hyperparams(args, dataset_name='br35h', return_full_history=False
         scheduler.step(test_loss)
         
         # Track best accuracy
+        if logger:
+            logger.info(
+                "Epoch %d/%d | train_loss=%.4f | train_acc=%.4f | test_loss=%.4f | test_acc=%.4f | best_acc=%.4f | lr=%.6f",
+                epoch + 1,
+                args.epochs,
+                train_loss,
+                train_acc,
+                test_loss,
+                test_acc,
+                max(best_acc, test_acc),
+                optimizer.param_groups[0]['lr']
+            )
+
         if test_acc > best_acc:
             best_acc = test_acc
     
@@ -113,7 +235,13 @@ def train_with_hyperparams(args, dataset_name='br35h', return_full_history=False
     return best_acc
 
 
-def random_search(dataset_name='br35h', n_trials=20, epochs=100, data_root='.'):
+def random_search(dataset_name='br35h',
+                  n_trials=20,
+                  epochs=100,
+                  data_root='.',
+                  mode='full',
+                  log_dir='logs',
+                  summary_top_k=3):
     """
     Perform random search hyperparameter optimization.
     
@@ -122,37 +250,35 @@ def random_search(dataset_name='br35h', n_trials=20, epochs=100, data_root='.'):
         n_trials: Number of random trials
         epochs: Number of training epochs per trial
         data_root: Root directory for datasets
+        mode: 'full' for exhaustive search, 'quick' for smaller, faster runs
+        log_dir: Directory where per-run logs should be saved
+        summary_top_k: Number of top-performing trials to include in the log summary
     
     Returns:
-        Dictionary with results and best hyperparameters
+        Dictionary with results, metadata, and best hyperparameters
     """
-    print(f"\n{'='*60}")
-    print(f"Random Search Hyperparameter Tuning for {dataset_name.upper()}")
-    print(f"{'='*60}")
-    print(f"Number of trials: {n_trials}")
-    print(f"Epochs per trial: {epochs}")
-    print(f"{'='*60}\n")
-    
-    # Define search space
-    search_space = {
-        'lr': [0.0001, 0.0005, 0.001, 0.002, 0.005, 0.01],
-        'batch_size': [16, 32, 64],
-        'hidden_dim': [32, 64, 128, 256],
-        'num_layers': [2, 3, 4, 5],
-        'dropout': [0.3, 0.4, 0.5, 0.6],
-        'weight_decay': [1e-5, 5e-5, 1e-4, 5e-4, 1e-3],
-        'use_gat': [True, False],
-        'n_segments': [50, 100, 150],
-        'grad_clip': [0.5, 1.0, 1.5]
-    }
+    logger, log_path = setup_search_logger(dataset_name, mode, log_dir)
+    logger.info("=" * 60)
+    logger.info(
+        "Random Search | dataset=%s | mode=%s | trials=%d | epochs=%d",
+        dataset_name.upper(),
+        mode,
+        n_trials,
+        epochs
+    )
+    search_space = get_search_space(mode)
+    logger.info(
+        "Search space sizes: %s",
+        {k: len(v) for k, v in search_space.items()}
+    )
     
     results = []
     best_score = 0.0
     best_params = None
     
     for trial in range(n_trials):
-        print(f"\nTrial {trial + 1}/{n_trials}")
-        print("-" * 60)
+        logger.info("-" * 60)
+        logger.info("Trial %d/%d", trial + 1, n_trials)
         
         # Randomly sample hyperparameters
         params = {
@@ -188,25 +314,35 @@ def random_search(dataset_name='br35h', n_trials=20, epochs=100, data_root='.'):
             num_workers=0
         )
         
-        # Print current hyperparameters
-        print(f"Learning Rate: {params['lr']:.6f}")
-        print(f"Batch Size: {params['batch_size']}")
-        print(f"Hidden Dim: {params['hidden_dim']}")
-        print(f"Num Layers: {params['num_layers']}")
-        print(f"Dropout: {params['dropout']}")
-        print(f"Weight Decay: {params['weight_decay']:.6f}")
-        print(f"Use GAT: {params['use_gat']}")
-        print(f"N Segments: {params['n_segments']}")
-        print(f"Grad Clip: {params['grad_clip']}")
+        logger.info(
+            "Params | lr=%.6f | batch=%d | hidden=%d | layers=%d | dropout=%.2f | wd=%.6f | gat=%s | segments=%d | grad_clip=%.2f",
+            params['lr'],
+            params['batch_size'],
+            params['hidden_dim'],
+            params['num_layers'],
+            params['dropout'],
+            params['weight_decay'],
+            params['use_gat'],
+            params['n_segments'],
+            params['grad_clip']
+        )
         
         # Train and evaluate
         start_time = time.time()
         try:
-            test_acc = train_with_hyperparams(args, dataset_name=dataset_name)
+            test_acc = train_with_hyperparams(
+                args,
+                dataset_name=dataset_name,
+                logger=logger
+            )
             train_time = time.time() - start_time
-            
-            print(f"Test Accuracy: {test_acc:.4f} ({test_acc*100:.2f}%)")
-            print(f"Training Time: {train_time/60:.2f} minutes")
+            logger.info(
+                "Trial %d completed | acc=%.4f (%.2f%%) | duration=%.2f min",
+                trial + 1,
+                test_acc,
+                test_acc * 100,
+                train_time / 60
+            )
             
             # Store results
             result = {
@@ -229,19 +365,25 @@ def random_search(dataset_name='br35h', n_trials=20, epochs=100, data_root='.'):
             if test_acc > best_score:
                 best_score = test_acc
                 best_params = params.copy()
-                print(f"*** NEW BEST SCORE: {best_score:.4f} ***")
+                logger.info("*** New best score: %.4f (%.2f%%) ***",
+                            best_score, best_score * 100)
         
         except Exception as e:
-            print(f"Error in trial {trial + 1}: {e}")
+            logger.exception("Error in trial %d: %s", trial + 1, e)
             continue
     
+    log_top_results(logger, results, best_params, best_score, summary_top_k)
+    logger.info("Logs saved to %s", log_path)
+
     return {
         'dataset': dataset_name,
         'n_trials': n_trials,
         'epochs': epochs,
         'results': results,
         'best_score': best_score,
-        'best_params': best_params
+        'best_params': best_params,
+        'mode': mode,
+        'log_file': log_path
     }
 
 
@@ -348,12 +490,23 @@ def main():
                        default='both', help='Dataset to tune')
     parser.add_argument('--data_root', type=str, default='.',
                        help='Root directory of datasets')
-    parser.add_argument('--n_trials', type=int, default=20,
-                       help='Number of random search trials')
-    parser.add_argument('--epochs', type=int, default=100,
-                       help='Number of epochs per trial')
+    parser.add_argument('--n_trials', type=int, default=None,
+                       help='Number of random search trials (default varies by mode)')
+    parser.add_argument('--epochs', type=int, default=None,
+                       help='Number of epochs per trial (default varies by mode)')
+    parser.add_argument('--mode', type=str, choices=['full', 'quick'],
+                       default='quick',
+                       help='Search mode: quick uses smaller search space and budgets')
+    parser.add_argument('--log_dir', type=str, default='logs',
+                       help='Directory for hyperparameter search logs')
+    parser.add_argument('--summary_top_k', type=int, default=3,
+                       help='How many top trials to summarize in logs')
     
     args = parser.parse_args()
+
+    defaults = FULL_DEFAULTS if args.mode == 'full' else QUICK_DEFAULTS
+    effective_n_trials = args.n_trials if args.n_trials is not None else defaults['n_trials']
+    effective_epochs = args.epochs if args.epochs is not None else defaults['epochs']
     
     all_results = {}
     
@@ -363,9 +516,12 @@ def main():
         print("="*60)
         br35h_results = random_search(
             dataset_name='br35h',
-            n_trials=args.n_trials,
-            epochs=args.epochs,
-            data_root=args.data_root
+            n_trials=effective_n_trials,
+            epochs=effective_epochs,
+            data_root=args.data_root,
+            mode=args.mode,
+            log_dir=args.log_dir,
+            summary_top_k=args.summary_top_k
         )
         all_results['br35h'] = br35h_results
         
@@ -387,9 +543,12 @@ def main():
         print("="*60)
         sartaj_results = random_search(
             dataset_name='sartaj',
-            n_trials=args.n_trials,
-            epochs=args.epochs,
-            data_root=args.data_root
+            n_trials=effective_n_trials,
+            epochs=effective_epochs,
+            data_root=args.data_root,
+            mode=args.mode,
+            log_dir=args.log_dir,
+            summary_top_k=args.summary_top_k
         )
         all_results['sartaj'] = sartaj_results
         
