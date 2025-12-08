@@ -19,6 +19,7 @@ from datetime import datetime
 import signal
 import argparse
 from typing import Dict, Any
+from pathlib import Path
 
 # Import existing modules
 from data_loader import Br35HDataset, SartajDataset
@@ -36,6 +37,50 @@ _global_epochs = 15  # Default epochs per trial
 _config_data_root = '.'
 _config_dataset_name = 'br35h'
 
+# Global logger (will be initialized in main)
+_logger = None
+
+
+def setup_logging(dataset_name: str, log_dir: str = 'logs') -> logging.Logger:
+    """
+    Setup logging to both file and console.
+    Returns logger instance.
+    """
+    # Create logs directory
+    Path(log_dir).mkdir(exist_ok=True)
+    
+    # Create logger
+    logger = logging.getLogger(f'optuna_search_{dataset_name}')
+    logger.setLevel(logging.DEBUG)
+    
+    # Remove existing handlers to avoid duplicates
+    logger.handlers = []
+    
+    # File handler with timestamp
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    log_file = os.path.join(log_dir, f'optuna_search_{dataset_name}_{timestamp}.log')
+    file_handler = logging.FileHandler(log_file, mode='w')
+    file_handler.setLevel(logging.DEBUG)
+    file_formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    file_handler.setFormatter(file_formatter)
+    
+    # Console handler (for visibility)
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+    console_formatter = logging.Formatter('%(message)s')
+    console_handler.setFormatter(console_formatter)
+    
+    # Add handlers
+    logger.addHandler(file_handler)
+    logger.addHandler(console_handler)
+    
+    logger.info(f"Logging initialized. Log file: {log_file}")
+    
+    return logger
+
 
 def setup_optuna_logging():
     """Configure Optuna logging to show all trial completions."""
@@ -47,7 +92,7 @@ def load_datasets_once(dataset_name: str, data_root: str):
     Load datasets once per process and store globally to avoid reloading in each trial.
     This significantly speeds up parallel execution.
     """
-    global _global_train_loader, _global_val_loader, _global_num_classes, _global_input_dim, _global_dataset_name
+    global _global_train_loader, _global_val_loader, _global_num_classes, _global_input_dim, _global_dataset_name, _logger
     
     # If already loaded in this process, skip
     if _global_train_loader is not None and _global_dataset_name == dataset_name:
@@ -55,7 +100,11 @@ def load_datasets_once(dataset_name: str, data_root: str):
     
     _global_dataset_name = dataset_name
     
-    print(f"[INFO] Loading {dataset_name.upper()} dataset (process {os.getpid()})...")
+    log_msg = f"Loading {dataset_name.upper()} dataset (process {os.getpid()})..."
+    if _logger:
+        _logger.info(log_msg)
+    else:
+        print(f"[INFO] {log_msg}")
     
     # Load datasets
     if dataset_name == 'br35h':
@@ -91,7 +140,11 @@ def load_datasets_once(dataset_name: str, data_root: str):
     _global_train_loader = train_dataset
     _global_val_loader = val_dataset
     
-    print(f"[INFO] Dataset loaded (process {os.getpid()}): input_dim={_global_input_dim}, num_classes={_global_num_classes}")
+    log_msg = f"Dataset loaded (process {os.getpid()}): input_dim={_global_input_dim}, num_classes={_global_num_classes}"
+    if _logger:
+        _logger.info(log_msg)
+    else:
+        print(f"[INFO] {log_msg}")
 
 
 def create_data_loaders(batch_size: int):
@@ -170,7 +223,7 @@ def objective(trial: optuna.Trial) -> float:
     Returns validation accuracy.
     """
     global _global_input_dim, _global_num_classes, _global_train_loader, _global_val_loader
-    global _global_dataset_name, _global_epochs, _config_data_root, _config_dataset_name
+    global _global_dataset_name, _global_epochs, _config_data_root, _config_dataset_name, _logger
     
     # Load datasets if not already loaded in this process
     if _global_train_loader is None:
@@ -227,56 +280,90 @@ def objective(trial: optuna.Trial) -> float:
         
         # Check if trial should be pruned
         if trial.should_prune():
+            if _logger:
+                _logger.info(f"Trial #{trial.number} PRUNED at epoch {epoch+1}")
             raise optuna.TrialPruned()
         
         # Track best accuracy
         if val_acc > best_val_acc:
             best_val_acc = val_acc
         
-        # Print progress (visible in terminal)
-        print(f"Trial #{trial.number} | Epoch {epoch+1}/{epochs} | "
-              f"Params: lr={learning_rate:.6f}, hidden={hidden_channels}, "
-              f"dropout={dropout:.3f}, wd={weight_decay:.6f}, opt={optimizer_name} | "
-              f"Train Acc: {train_acc:.4f} | Val Acc: {val_acc:.4f} | "
-              f"Best Val Acc: {best_val_acc:.4f}")
+        # Log progress (both file and console)
+        log_msg = (f"Trial #{trial.number} | Epoch {epoch+1}/{epochs} | "
+                   f"Params: lr={learning_rate:.6f}, hidden={hidden_channels}, "
+                   f"dropout={dropout:.3f}, wd={weight_decay:.6f}, opt={optimizer_name} | "
+                   f"Train Acc: {train_acc:.4f} | Val Acc: {val_acc:.4f} | "
+                   f"Best Val Acc: {best_val_acc:.4f}")
+        if _logger:
+            _logger.info(log_msg)
+        else:
+            print(log_msg)
     
-    # Final print statement
-    print(f"Trial #{trial.number} COMPLETED | Params: {{"
-          f"'learning_rate': {learning_rate:.6f}, "
-          f"'hidden_channels': {hidden_channels}, "
-          f"'dropout': {dropout:.3f}, "
-          f"'weight_decay': {weight_decay:.6f}, "
-          f"'optimizer': '{optimizer_name}'}} | "
-          f"Final Accuracy: {best_val_acc:.4f}")
+    # Final log statement
+    final_msg = (f"Trial #{trial.number} COMPLETED | Params: {{"
+                 f"'learning_rate': {learning_rate:.6f}, "
+                 f"'hidden_channels': {hidden_channels}, "
+                 f"'dropout': {dropout:.3f}, "
+                 f"'weight_decay': {weight_decay:.6f}, "
+                 f"'optimizer': '{optimizer_name}'}} | "
+                 f"Final Accuracy: {best_val_acc:.4f}")
+    if _logger:
+        _logger.info(final_msg)
+    else:
+        print(final_msg)
     
     return best_val_acc
 
 
 def create_visualizations(study: optuna.Study, output_dir: str = '.'):
     """Create and save optimization visualizations."""
-    print("\n[INFO] Creating visualizations...")
+    global _logger
+    
+    msg = "\nCreating visualizations..."
+    if _logger:
+        _logger.info(msg)
+    else:
+        print(f"[INFO] {msg}")
     
     # Optimization history
     try:
         fig = optuna_vis.plot_optimization_history(study)
         fig.savefig(os.path.join(output_dir, 'optimization_history.png'), dpi=300, bbox_inches='tight')
         plt.close(fig)
-        print(f"[INFO] Saved: optimization_history.png")
+        msg = "Saved: optimization_history.png"
+        if _logger:
+            _logger.info(msg)
+        else:
+            print(f"[INFO] {msg}")
     except Exception as e:
-        print(f"[WARNING] Failed to create optimization_history.png: {e}")
+        msg = f"Failed to create optimization_history.png: {e}"
+        if _logger:
+            _logger.warning(msg)
+        else:
+            print(f"[WARNING] {msg}")
     
     # Parameter importances
     try:
         fig = optuna_vis.plot_param_importances(study)
         fig.savefig(os.path.join(output_dir, 'param_importances.png'), dpi=300, bbox_inches='tight')
         plt.close(fig)
-        print(f"[INFO] Saved: param_importances.png")
+        msg = "Saved: param_importances.png"
+        if _logger:
+            _logger.info(msg)
+        else:
+            print(f"[INFO] {msg}")
     except Exception as e:
-        print(f"[WARNING] Failed to create param_importances.png: {e}")
+        msg = f"Failed to create param_importances.png: {e}"
+        if _logger:
+            _logger.warning(msg)
+        else:
+            print(f"[WARNING] {msg}")
 
 
 def save_best_params(study: optuna.Study, output_file: str = 'best_params.json'):
     """Save best hyperparameters to JSON file."""
+    global _logger
+    
     best_params = study.best_params.copy()
     best_params['best_value'] = study.best_value
     best_params['n_trials'] = len(study.trials)
@@ -284,18 +371,31 @@ def save_best_params(study: optuna.Study, output_file: str = 'best_params.json')
     with open(output_file, 'w') as f:
         json.dump(best_params, f, indent=2)
     
-    print(f"[INFO] Best parameters saved to: {output_file}")
-    print(f"[INFO] Best accuracy: {study.best_value:.4f} ({study.best_value*100:.2f}%)")
+    msg1 = f"Best parameters saved to: {output_file}"
+    msg2 = f"Best accuracy: {study.best_value:.4f} ({study.best_value*100:.2f}%)"
+    if _logger:
+        _logger.info(msg1)
+        _logger.info(msg2)
+    else:
+        print(f"[INFO] {msg1}")
+        print(f"[INFO] {msg2}")
 
 
 def signal_handler(sig, frame):
     """Handle Ctrl+C gracefully."""
-    print("\n[INFO] Interrupted by user. Saving current progress...")
+    global _logger
+    msg = "\nInterrupted by user. Saving current progress..."
+    if _logger:
+        _logger.info(msg)
+    else:
+        print(f"[INFO] {msg}")
     sys.exit(0)
 
 
 def main():
     """Main function for hyperparameter search."""
+    global _logger
+    
     parser = argparse.ArgumentParser(description='Optuna Hyperparameter Search for GNN')
     parser.add_argument('--dataset', type=str, choices=['br35h', 'sartaj'],
                        default='br35h', help='Dataset to use')
@@ -309,8 +409,13 @@ def main():
                        help='SQLite storage path (optional, for thread safety)')
     parser.add_argument('--study_name', type=str, default=None,
                        help='Study name (for resuming)')
+    parser.add_argument('--log_dir', type=str, default='logs',
+                       help='Directory for log files (default: logs)')
     
     args = parser.parse_args()
+    
+    # Setup logging (file + console)
+    _logger = setup_logging(args.dataset, args.log_dir)
     
     # Register signal handler for graceful shutdown
     signal.signal(signal.SIGINT, signal_handler)
@@ -318,15 +423,14 @@ def main():
     # Setup Optuna logging
     setup_optuna_logging()
     
-    # Load datasets once (before parallel execution)
-    print(f"\n{'='*80}")
-    print(f"OPTUNA HYPERPARAMETER SEARCH")
-    print(f"{'='*80}")
-    print(f"Dataset: {args.dataset.upper()}")
-    print(f"Trials: {args.n_trials}")
-    print(f"Epochs per trial: {args.epochs}")
-    print(f"Parallel execution: ENABLED (all CPU cores)")
-    print(f"{'='*80}\n")
+    # Log startup information
+    header = f"\n{'='*80}\nOPTUNA HYPERPARAMETER SEARCH\n{'='*80}"
+    _logger.info(header)
+    _logger.info(f"Dataset: {args.dataset.upper()}")
+    _logger.info(f"Trials: {args.n_trials}")
+    _logger.info(f"Epochs per trial: {args.epochs}")
+    _logger.info(f"Parallel execution: ENABLED (all CPU cores)")
+    _logger.info(f"{'='*80}\n")
     
     # Set module-level configuration (accessible in all processes)
     global _config_data_root, _config_dataset_name, _global_epochs
@@ -361,9 +465,9 @@ def main():
             pruner=pruner
         )
     
-    print(f"[INFO] Starting optimization with {args.n_trials} trials...")
-    print(f"[INFO] Pruner: MedianPruner (startup_trials=5, warmup_steps=5)")
-    print(f"[INFO] Press Ctrl+C to stop and save progress\n")
+    _logger.info(f"Starting optimization with {args.n_trials} trials...")
+    _logger.info(f"Pruner: MedianPruner (startup_trials=5, warmup_steps=5)")
+    _logger.info(f"Press Ctrl+C to stop and save progress\n")
     
     try:
         # Optimize with parallel execution
@@ -374,20 +478,25 @@ def main():
             show_progress_bar=True
         )
     except KeyboardInterrupt:
-        print("\n[INFO] Optimization interrupted by user.")
+        _logger.info("\nOptimization interrupted by user.")
     
     # Results summary
-    print(f"\n{'='*80}")
-    print(f"OPTIMIZATION COMPLETE")
-    print(f"{'='*80}")
-    print(f"Number of completed trials: {len([t for t in study.trials if t.state == optuna.trial.TrialState.COMPLETE])}")
-    print(f"Number of pruned trials: {len([t for t in study.trials if t.state == optuna.trial.TrialState.PRUNED])}")
-    print(f"Best trial: {study.best_trial.number}")
-    print(f"Best value: {study.best_value:.4f} ({study.best_value*100:.2f}%)")
-    print(f"Best params:")
+    completed_trials = len([t for t in study.trials if t.state == optuna.trial.TrialState.COMPLETE])
+    pruned_trials = len([t for t in study.trials if t.state == optuna.trial.TrialState.PRUNED])
+    
+    summary = (f"\n{'='*80}\n"
+               f"OPTIMIZATION COMPLETE\n"
+               f"{'='*80}\n"
+               f"Number of completed trials: {completed_trials}\n"
+               f"Number of pruned trials: {pruned_trials}\n"
+               f"Best trial: {study.best_trial.number}\n"
+               f"Best value: {study.best_value:.4f} ({study.best_value*100:.2f}%)\n"
+               f"Best params:\n")
     for key, value in study.best_params.items():
-        print(f"  {key}: {value}")
-    print(f"{'='*80}\n")
+        summary += f"  {key}: {value}\n"
+    summary += f"{'='*80}\n"
+    
+    _logger.info(summary)
     
     # Save results
     output_prefix = f"optuna_{args.dataset}"
@@ -400,7 +509,7 @@ def main():
     if os.path.exists('param_importances.png'):
         os.rename('param_importances.png', f"{output_prefix}_param_importances.png")
     
-    print(f"\n[INFO] All results saved with prefix: {output_prefix}_")
+    _logger.info(f"\nAll results saved with prefix: {output_prefix}_")
 
 
 if __name__ == '__main__':
