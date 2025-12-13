@@ -14,11 +14,11 @@ def test_br35h():
             print(f"  Sample node features shape: {sample.x.shape}")
             print(f"  Sample edge index shape: {sample.edge_index.shape}")
             print(f"  Sample label: {sample.y.item()}")
-            print("  ✓ br35h dataset loaded successfully!")
+            print("  OK br35h dataset loaded successfully!")
         else:
-            print("  ✗ No samples found in br35h dataset")
+            print("  NO SAMPLES found in br35h dataset")
     except Exception as e:
-        print(f"  ✗ Error loading br35h dataset: {e}")
+        print(f"  ERROR loading br35h dataset: {e}")
 
 def test_sartaj():
     print("Testing sartaj dataset...")
@@ -31,11 +31,11 @@ def test_sartaj():
             print(f"  Sample node features shape: {sample.x.shape}")
             print(f"  Sample edge index shape: {sample.edge_index.shape}")
             print(f"  Sample label: {sample.y.item()}")
-            print("  ✓ sartaj dataset loaded successfully!")
+            print("  OK sartaj dataset loaded successfully!")
         else:
-            print("  ✗ No samples found in sartaj dataset")
+            print("  NO SAMPLES found in sartaj dataset")
     except Exception as e:
-        print(f"  ✗ Error loading sartaj dataset: {e}")
+        print(f"  ERROR loading sartaj dataset: {e}")
 
 def test_dataloader():
     print("Testing DataLoader...")
@@ -48,11 +48,11 @@ def test_dataloader():
             print(f"  Batch edge index shape: {batch.edge_index.shape}")
             print(f"  Batch labels shape: {batch.y.shape}")
             print(f"  Batch size: {batch.batch.max().item() + 1}")
-            print("  ✓ DataLoader works correctly!")
+            print("  OK DataLoader works correctly!")
         else:
-            print("  ✗ Cannot test DataLoader - no samples")
+            print("  NO SAMPLES available to test DataLoader")
     except Exception as e:
-        print(f"  ✗ Error testing DataLoader: {e}")
+        print(f"  ERROR testing DataLoader: {e}")
 
 if __name__ == '__main__':
     print("=" * 50)

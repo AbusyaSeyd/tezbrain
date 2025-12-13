@@ -83,6 +83,8 @@ python train_gnn.py \
 - `--weight_decay`: Weight decay (default: 5e-4)
 - `--n_segments`: Number of superpixels for graph construction (default: 100)
 - `--use_gat`: Use Graph Attention Network instead of GCN
+- `--artifact_dir`: Base folder to store models, metrics, plots (default: `artifacts`)
+- `--log_dir`: Directory for logs (default: `artifacts/logs`)
 
 ## Model Architecture
 
@@ -99,13 +101,11 @@ The GNN model consists of:
 
 ## Outputs
 
-After training, the following files are generated:
-- `best_model_br35h.pth`: Best model for br35h dataset
-- `best_model_sartaj.pth`: Best model for sartaj dataset
-- `confusion_matrix_br35h.png`: Confusion matrix for br35h
-- `confusion_matrix_sartaj.png`: Confusion matrix for sartaj
-- `training_curves_br35h.png`: Training curves for br35h
-- `training_curves_sartaj.png`: Training curves for sartaj
+After training, artifacts are organized under `artifacts/`:
+- Models: `artifacts/models/best_model_{dataset}.pth`
+- Metrics: `artifacts/metrics/training_metrics_{dataset}.json`
+- Plots: `artifacts/plots/confusion_matrix_{dataset}.png`, `artifacts/plots/training_curves_{dataset}.png`
+- Logs: `artifacts/logs/`
 
 ## Requirements
 

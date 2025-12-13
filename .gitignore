@@ -45,6 +45,9 @@ ENV/
 logs/
 *.log
 
+# Generated artifacts
+artifacts/
+
 # Generated outputs
 *.png
 *.jpg

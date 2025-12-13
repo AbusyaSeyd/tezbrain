@@ -12,10 +12,12 @@ import numpy as np
 from tqdm import tqdm
 import json
 from typing import List
+from pathlib import Path
 
 from data_loader import Br35HDataset, SartajDataset
 from gnn_model import BrainTumorGNN, GraphClassifier
 from gnn_pruning import GNNPruner, compare_models, prune_model_weights
+from paths import prepare_artifact_dirs
 
 def evaluate_model(model, test_loader, device, criterion):
     """Evaluate model accuracy."""
@@ -256,8 +258,14 @@ def main():
                        help='Hidden dimension')
     parser.add_argument('--num_layers', type=int, default=3,
                        help='Number of GNN layers')
+    parser.add_argument('--artifact_dir', type=str, default='artifacts',
+                       help='Base directory to store models, metrics, and plots')
     
     args = parser.parse_args()
+    artifact_dirs = prepare_artifact_dirs(args.artifact_dir)
+    models_dir = artifact_dirs["models"]
+    metrics_dir = artifact_dirs["metrics"]
+    plots_dir = artifact_dirs["plots"]
     
     # Device
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -285,9 +293,10 @@ def main():
     input_dim = sample.x.shape[1]
     
     # Load or create model
-    if args.model_path and os.path.exists(args.model_path):
-        print(f"Loading model from {args.model_path}")
-        checkpoint = torch.load(args.model_path, map_location=device)
+    model_path = Path(args.model_path) if args.model_path else None
+    if model_path and model_path.exists():
+        print(f"Loading model from {model_path}")
+        checkpoint = torch.load(model_path, map_location=device)
         if isinstance(checkpoint, dict):
             if 'model_state_dict' in checkpoint:
                 state_dict = checkpoint['model_state_dict']
@@ -344,7 +353,7 @@ def main():
                 print(f"  Epoch {epoch+1}/30, Test Acc: {test_acc:.4f}")
         
         # Save model
-        model_path = f'baseline_model_{args.dataset}.pth'
+        model_path = models_dir / f'baseline_model_{args.dataset}.pth'
         torch.save(model.state_dict(), model_path)
         print(f"Model saved to {model_path}")
     
@@ -393,7 +402,8 @@ def main():
     print("GENERATING VISUALIZATIONS")
     print("=" * 60)
     
-    visualize_pruning_results(results, original_acc, original_size, args.dataset)
+    results_plot_path = plots_dir / f'pruning_results_{args.dataset}.png'
+    visualize_pruning_results(results, original_acc, original_size, args.dataset, save_path=results_plot_path)
     
     # Save results to JSON
     results_summary = {
@@ -415,10 +425,11 @@ def main():
             float(a) for a in results['fine_tuned_accuracies']
         ]
     
-    with open(f'pruning_results_{args.dataset}.json', 'w') as f:
+    results_json_path = metrics_dir / f'pruning_results_{args.dataset}.json'
+    with open(results_json_path, 'w') as f:
         json.dump(results_summary, f, indent=2)
     
-    print(f"\nResults summary saved to pruning_results_{args.dataset}.json")
+    print(f"\nResults summary saved to {results_json_path}")
     
     # Print summary
     print("\n" + "=" * 60)

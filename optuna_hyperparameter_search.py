@@ -19,10 +19,12 @@ from datetime import datetime
 import signal
 import argparse
 from typing import Dict, Any
+from pathlib import Path
 
 # Import existing modules
 from data_loader import Br35HDataset, SartajDataset
 from gnn_model import BrainTumorGNN, GraphClassifier
+from paths import prepare_artifact_dirs
 
 # Global variables for dataset (loaded once per process to avoid reloading in each trial)
 _global_train_loader = None
@@ -255,11 +257,13 @@ def objective(trial: optuna.Trial) -> float:
 def create_visualizations(study: optuna.Study, output_dir: str = '.'):
     """Create and save optimization visualizations."""
     print("\n[INFO] Creating visualizations...")
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
     
     # Optimization history
     try:
         fig = optuna_vis.plot_optimization_history(study)
-        fig.savefig(os.path.join(output_dir, 'optimization_history.png'), dpi=300, bbox_inches='tight')
+        fig.savefig(output_path / 'optimization_history.png', dpi=300, bbox_inches='tight')
         plt.close(fig)
         print(f"[INFO] Saved: optimization_history.png")
     except Exception as e:
@@ -268,7 +272,7 @@ def create_visualizations(study: optuna.Study, output_dir: str = '.'):
     # Parameter importances
     try:
         fig = optuna_vis.plot_param_importances(study)
-        fig.savefig(os.path.join(output_dir, 'param_importances.png'), dpi=300, bbox_inches='tight')
+        fig.savefig(output_path / 'param_importances.png', dpi=300, bbox_inches='tight')
         plt.close(fig)
         print(f"[INFO] Saved: param_importances.png")
     except Exception as e:
@@ -281,10 +285,12 @@ def save_best_params(study: optuna.Study, output_file: str = 'best_params.json')
     best_params['best_value'] = study.best_value
     best_params['n_trials'] = len(study.trials)
     
-    with open(output_file, 'w') as f:
+    output_path = Path(output_file)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(output_path, 'w') as f:
         json.dump(best_params, f, indent=2)
     
-    print(f"[INFO] Best parameters saved to: {output_file}")
+    print(f"[INFO] Best parameters saved to: {output_path}")
     print(f"[INFO] Best accuracy: {study.best_value:.4f} ({study.best_value*100:.2f}%)")
 
 
@@ -309,8 +315,13 @@ def main():
                        help='SQLite storage path (optional, for thread safety)')
     parser.add_argument('--study_name', type=str, default=None,
                        help='Study name (for resuming)')
+    parser.add_argument('--artifact_dir', type=str, default='artifacts',
+                       help='Base directory to store models, metrics, and plots')
     
     args = parser.parse_args()
+    artifact_dirs = prepare_artifact_dirs(args.artifact_dir)
+    metrics_dir = artifact_dirs["metrics"]
+    plots_dir = artifact_dirs["plots"]
     
     # Register signal handler for graceful shutdown
     signal.signal(signal.SIGINT, signal_handler)
@@ -391,14 +402,17 @@ def main():
     
     # Save results
     output_prefix = f"optuna_{args.dataset}"
-    save_best_params(study, f"{output_prefix}_best_params.json")
-    create_visualizations(study, '.')
+    best_params_path = metrics_dir / f"{output_prefix}_best_params.json"
+    save_best_params(study, best_params_path)
+    create_visualizations(study, plots_dir)
     
     # Rename visualization files with prefix
-    if os.path.exists('optimization_history.png'):
-        os.rename('optimization_history.png', f"{output_prefix}_optimization_history.png")
-    if os.path.exists('param_importances.png'):
-        os.rename('param_importances.png', f"{output_prefix}_param_importances.png")
+    hist_path = plots_dir / 'optimization_history.png'
+    param_path = plots_dir / 'param_importances.png'
+    if hist_path.exists():
+        hist_path.rename(plots_dir / f"{output_prefix}_optimization_history.png")
+    if param_path.exists():
+        param_path.rename(plots_dir / f"{output_prefix}_param_importances.png")
     
     print(f"\n[INFO] All results saved with prefix: {output_prefix}_")
 

@@ -8,9 +8,11 @@ import os
 import time
 import logging
 from datetime import datetime
+from pathlib import Path
 
 from data_loader import Br35HDataset, SartajDataset
 from gnn_model import BrainTumorGNN, GraphClassifier
+from paths import prepare_artifact_dirs
 
 # ---------------------------------------------------------------------------
 # Helper utilities
@@ -497,12 +499,19 @@ def main():
     parser.add_argument('--mode', type=str, choices=['full', 'quick'],
                        default='quick',
                        help='Search mode: quick uses smaller search space and budgets')
-    parser.add_argument('--log_dir', type=str, default='logs',
-                       help='Directory for hyperparameter search logs')
+    parser.add_argument('--artifact_dir', type=str, default='artifacts',
+                       help='Base directory to store models, metrics, and plots')
+    parser.add_argument('--log_dir', type=str, default=None,
+                       help='Directory for hyperparameter search logs (defaults to <artifact_dir>/logs)')
     parser.add_argument('--summary_top_k', type=int, default=3,
                        help='How many top trials to summarize in logs')
     
     args = parser.parse_args()
+
+    artifact_dirs = prepare_artifact_dirs(args.artifact_dir)
+    plots_dir = artifact_dirs["plots"]
+    metrics_dir = artifact_dirs["metrics"]
+    log_dir = Path(args.log_dir) if args.log_dir else artifact_dirs["logs"]
 
     defaults = FULL_DEFAULTS if args.mode == 'full' else QUICK_DEFAULTS
     effective_n_trials = args.n_trials if args.n_trials is not None else defaults['n_trials']
@@ -520,7 +529,7 @@ def main():
             epochs=effective_epochs,
             data_root=args.data_root,
             mode=args.mode,
-            log_dir=args.log_dir,
+            log_dir=str(log_dir),
             summary_top_k=args.summary_top_k
         )
         all_results['br35h'] = br35h_results
@@ -528,14 +537,14 @@ def main():
         # Create visualization
         create_results_table_image(
             br35h_results,
-            output_file='hyperparameter_search_results_br35h.png'
+            output_file=plots_dir / 'hyperparameter_search_results_br35h.png'
         )
         
         # Save results to JSON
         import json
-        with open('hyperparameter_search_results_br35h.json', 'w') as f:
+        with open(metrics_dir / 'hyperparameter_search_results_br35h.json', 'w') as f:
             json.dump(br35h_results, f, indent=2)
-        print("\nResults saved to hyperparameter_search_results_br35h.json")
+        print(f"\nResults saved to {metrics_dir / 'hyperparameter_search_results_br35h.json'}")
     
     if args.dataset == 'sartaj' or args.dataset == 'both':
         print("\n" + "="*60)
@@ -547,7 +556,7 @@ def main():
             epochs=effective_epochs,
             data_root=args.data_root,
             mode=args.mode,
-            log_dir=args.log_dir,
+            log_dir=str(log_dir),
             summary_top_k=args.summary_top_k
         )
         all_results['sartaj'] = sartaj_results
@@ -555,25 +564,25 @@ def main():
         # Create visualization
         create_results_table_image(
             sartaj_results,
-            output_file='hyperparameter_search_results_sartaj.png'
+            output_file=plots_dir / 'hyperparameter_search_results_sartaj.png'
         )
         
         # Save results to JSON
         import json
-        with open('hyperparameter_search_results_sartaj.json', 'w') as f:
+        with open(metrics_dir / 'hyperparameter_search_results_sartaj.json', 'w') as f:
             json.dump(sartaj_results, f, indent=2)
-        print("\nResults saved to hyperparameter_search_results_sartaj.json")
+        print(f"\nResults saved to {metrics_dir / 'hyperparameter_search_results_sartaj.json'}")
     
     # Create combined visualization if both datasets
     if args.dataset == 'both':
-        create_combined_results_image(all_results)
+        create_combined_results_image(all_results, output_file=plots_dir / 'hyperparameter_search_results_combined.png')
     
     print("\n" + "="*60)
     print("Hyperparameter search completed!")
     print("="*60)
 
 
-def create_combined_results_image(all_results):
+def create_combined_results_image(all_results, output_file='hyperparameter_search_results_combined.png'):
     """Create a combined visualization showing both datasets."""
     fig = plt.figure(figsize=(24, 16))
     gs = fig.add_gridspec(2, 1, hspace=0.3)
@@ -644,9 +653,9 @@ def create_combined_results_image(all_results):
     
     plt.suptitle('Random Search Hyperparameter Tuning - Combined Results', 
                  fontsize=20, fontweight='bold', y=0.98)
-    plt.savefig('hyperparameter_search_results_combined.png', dpi=300, bbox_inches='tight', facecolor='white')
+    plt.savefig(output_file, dpi=300, bbox_inches='tight', facecolor='white')
     plt.close()
-    print("\nCombined results table saved to hyperparameter_search_results_combined.png")
+    print(f"\nCombined results table saved to {output_file}")
 
 
 if __name__ == '__main__':

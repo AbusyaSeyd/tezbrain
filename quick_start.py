@@ -2,6 +2,7 @@
 import subprocess
 import sys
 import os
+from pathlib import Path
 
 def main():
     print("=" * 60)
@@ -59,14 +60,17 @@ def main():
         print("Training completed successfully!")
         print("=" * 60)
         print("\nCheck the following files for results:")
+        artifact_dir = Path('artifacts')
+        models_dir = artifact_dir / 'models'
+        plots_dir = artifact_dir / 'plots'
         if dataset in ['br35h', 'both']:
-            print("  - best_model_br35h.pth")
-            print("  - confusion_matrix_br35h.png")
-            print("  - training_curves_br35h.png")
+            print(f"  - {models_dir / 'best_model_br35h.pth'}")
+            print(f"  - {plots_dir / 'confusion_matrix_br35h.png'}")
+            print(f"  - {plots_dir / 'training_curves_br35h.png'}")
         if dataset in ['sartaj', 'both']:
-            print("  - best_model_sartaj.pth")
-            print("  - confusion_matrix_sartaj.png")
-            print("  - training_curves_sartaj.png")
+            print(f"  - {models_dir / 'best_model_sartaj.pth'}")
+            print(f"  - {plots_dir / 'confusion_matrix_sartaj.png'}")
+            print(f"  - {plots_dir / 'training_curves_sartaj.png'}")
     except subprocess.CalledProcessError as e:
         print(f"\nError during training: {e}")
         print("Please check the error messages above.")
