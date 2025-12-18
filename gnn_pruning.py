@@ -56,65 +56,55 @@ class GNNPruner:
         Returns:
             Dictionary with pruning statistics
         """
+        
+
+        
+        """
+        Magnitude-based pruning (Updated for TRUE Structured Pruning).
+        """
         prunable_layers = self.get_prunable_layers()
         total_params = 0
         pruned_params = 0
         
         for name, module in prunable_layers:
             try:
-                # Only prune if module has weight parameter
+                # Пропускаем, если весов нет
                 if not hasattr(module, 'weight') or module.weight is None:
                     continue
                 
-                # Check if weight is a parameter (not just a buffer)
-                if 'weight' not in dict(module.named_parameters()):
-                    continue
+                # Получаем сам тензор весов
+                weight = module.weight
                 
                 if structured:
-                    # Structured pruning: remove entire channels/neurons
-                    if isinstance(module, nn.Linear):
+                    # --- ИЗМЕНЕНИЯ ЗДЕСЬ ---
+                    # Мы применяем Structured Pruning (L2) ко ВСЕМ слоям, включая GNN
+                    # dim=0 удаляет выходные каналы (нейроны)
+                    # n=2 означает L2-норму (Euclidean norm)
+                    try:
                         prune.ln_structured(module, name='weight', amount=amount, n=2, dim=0)
-                    elif isinstance(module, (nn.Conv2d, nn.Conv1d)):
-                        prune.ln_structured(module, name='weight', amount=amount, n=2, dim=0)
-                    else:
-                        # For GNN layers, use unstructured pruning as fallback
+                    except Exception as e:
+                        print(f"Warning: Could not structure-prune {name}, falling back to unstructured. Error: {e}")
                         prune.l1_unstructured(module, name='weight', amount=amount)
                 else:
-                    # Unstructured pruning: remove individual weights
+                    # Старый добрый Unstructured (L1)
                     prune.l1_unstructured(module, name='weight', amount=amount)
                 
-                # Count parameters (after pruning, check the actual weight tensor)
-                weight = module.weight
+                # Подсчет статистики (остался прежним)
                 if weight is not None:
                     total_params += weight.numel()
-                    # For pruned weights, we need to check the mask or actual zeros
                     if hasattr(module, 'weight_mask'):
-                        # Weight has been masked
                         pruned_params += (module.weight_mask == 0).sum().item()
                     else:
-                        # Check for zeros (after remove_masks)
                         pruned_params += (weight == 0).sum().item()
                 
-                # Add bias pruning if exists and is a parameter
+                # Bias pruning (обычно оставляем L1, так как bias - это одномерный вектор)
                 if hasattr(module, 'bias') and module.bias is not None:
-                    if 'bias' in dict(module.named_parameters()):
-                        try:
-                            if structured and isinstance(module, nn.Linear):
-                                prune.ln_structured(module, name='bias', amount=amount, n=2, dim=0)
-                            else:
-                                prune.l1_unstructured(module, name='bias', amount=amount)
-                            
-                            total_params += module.bias.numel()
-                            if hasattr(module, 'bias_mask'):
-                                pruned_params += (module.bias_mask == 0).sum().item()
-                            else:
-                                pruned_params += (module.bias == 0).sum().item()
-                        except:
-                            pass  # Skip if bias pruning fails
-                
+                    prune.l1_unstructured(module, name='bias', amount=amount)
+                    
                 self.pruned_layers.append(name)
+
             except Exception as e:
-                # Skip layers that can't be pruned
+                print(f"Skipping layer {name}: {e}")
                 continue
         
         sparsity = pruned_params / total_params if total_params > 0 else 0.0
@@ -122,7 +112,6 @@ class GNNPruner:
         return {
             'total_params': total_params,
             'pruned_params': pruned_params,
-            'remaining_params': total_params - pruned_params,
             'sparsity': sparsity,
             'pruned_layers': self.pruned_layers
         }

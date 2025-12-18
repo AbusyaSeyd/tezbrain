@@ -117,11 +117,12 @@ class ImageToGraphConverter:
                 image = Image.fromarray(image).resize(new_shape[::-1])
                 image = np.array(image)
         
-        # Convert to RGB if needed
+        # Convert to RGB if needed (keep uint8 to avoid LBP float warnings)
         if len(image.shape) == 2:
             image = color.gray2rgb(image)
         elif image.shape[2] == 4:
             image = color.rgba2rgb(image)
+        image = np.clip(np.rint(image), 0, 255).astype(np.uint8)
         
         # Create superpixels
         labels = segmentation.slic(
